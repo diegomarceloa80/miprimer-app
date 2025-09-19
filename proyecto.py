@@ -84,8 +84,12 @@ def get_recommendations_from_openai(age_months, weight_kg, height_cm, dci_status
 
 st.title("Diagnóstico de Desnutrición Crónica Infantil (DCI) y Recomendaciones de Alimentación")
 st.markdown("---")
+# Información inicial y contexto, amplia en tamaño de fuente y color naranja
 st.markdown(
-    ":orange-badge[⚠️ 1 de 3] :gray-badge[niños menores de 2 años en Ecuador sufre de desnutrición crónica.]  \n (Fuente: UNICEF Ecuador)"
+    "<span style='font-size:2rem; color:orange; font-weight:bold;'>⚠️ 1 de 3</span> "
+    "<span style='font-size:1.5rem; color:gray;'>niños menores de 2 años en Ecuador sufre de desnutrición crónica.</span> "
+    "<span style='font-size:1rem;'>(Fuente: UNICEF Ecuador)</span>",
+    unsafe_allow_html=True
 )
 
 # Ask user for their OpenAI API key via `st.text_input`.
