@@ -65,8 +65,8 @@ def get_recommendations_from_openai(age_months, weight_kg, height_cm, dci_status
             {"role": "system", "content": "Eres un experto en nutrición infantil que provee recomendaciones prácticas."},
             {"role": "user", "content": prompt}
         ],
-        "temperature": 0.7,
-        "max_tokens": 500
+        "temperature": 0.7 #,  # Controla la creatividad de la respuesta
+        #"max_tokens": 500
     }
 
     try:
@@ -106,11 +106,16 @@ st.markdown("---")
 if submitted:
     st.header("2. Resultados del Análisis")
     
-    # 1. Clasificación
-    dci_status = classify_dci(age_months, height_cm)
-    st.write(f"### Estado de Salud Detectado: **{dci_status}**")
+# 1. Clasificación
+dci_status = classify_dci(age_months, height_cm)
+# Mostrar el estado de salud coloca un color según el estado
+if dci_status == "Riesgo de Desnutrición Crónica":
+    st.error(f"### Estado de Salud Detectado: **{dci_status}**")
+else:
+    st.success(f"### Estado de Salud Detectado: **{dci_status}**")
+#
     
-   # Datos de ejemplo de la OMS (talla para la edad para niños, de 0 a 60 meses)
+# Datos de ejemplo de la OMS (talla para la edad para niños, de 0 a 60 meses)
 # Nota: En un proyecto real, estos datos se cargarían desde un archivo CSV o una base de datos.
 # Aquí se presentan de forma simplificada para ilustrar el concepto.
 def get_who_data():
@@ -149,20 +154,6 @@ def classify_dci(age_months, height_cm, who_df):
 # Carga de datos de la OMS
 who_df = get_who_data()
 
-# --- Interfaz de la aplicación Streamlit ---
-st.title("Proyecto Final: Diagnóstico de Desnutrición Crónica Infantil")
-st.markdown("---")
-st.header("1. Ingreso de Parámetros")
-
-with st.form("input_form"):
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        age_months = st.number_input("Edad del niño (meses)", min_value=1, max_value=60, step=1, value=24)
-    with col2:
-        weight_kg = st.number_input("Peso (kg)", min_value=1.0, max_value=50.0, step=0.1, value=10.0)
-    with col3:
-        height_cm = st.number_input("Estatura (cm)", min_value=30.0, max_value=150.0, step=0.1, value=85.0)
-    submitted = st.form_submit_button("Analizar")
 
 st.markdown("---")
 
