@@ -158,10 +158,10 @@ who_df = get_who_data()
 st.markdown("---")
 
 if submitted:
-    st.header("2. Resultados del Análisis")
+    #st.header("2. Resultados del Análisis")
     
-    dci_status = classify_dci(age_months, height_cm, who_df)
-    st.write(f"### Estado de Salud Detectado: **{dci_status}**")
+   # dci_status = classify_dci(age_months, height_cm, who_df)
+    #st.write(f"### Estado de Salud Detectado: **{dci_status}**")
     
     st.subheader("Gráfico Comparativo: Estatura vs. Estándares de Referencia")
     
