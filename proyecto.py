@@ -92,7 +92,8 @@ with st.form("input_form"):
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        age_months = st.number_input("Edad del niño (meses)", min_value=1, max_value=60, step=1, value=24)
+        #age_months = st.number_input("Edad del niño (meses)", min_value=1, max_value=60, step=1, value=24)
+        age_months = st.slider("Edad del niño (meses)", min_value=1, max_value=60, step=1, value=24)
     with col2:
         weight_kg = st.number_input("Peso (kg)", min_value=1.0, max_value=50.0, step=0.1, value=10.0)
     with col3:
