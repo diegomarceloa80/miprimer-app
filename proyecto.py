@@ -87,7 +87,7 @@ st.markdown("---")
 # Información inicial y contexto, amplia en tamaño de fuente y color naranja
 st.markdown(
     "<span style='font-size:2rem; color:orange; font-weight:bold;'>⚠️ 1 de 3</span> "
-    "<span style='font-size:1.5rem; color:gray;'>niños menores de 2 años en Ecuador sufre de desnutrición crónica.</span> "
+    "<span style='font-size:1.5rem; color:gray;'>:family_woman_girl_boy: niños menores de 2 años en Ecuador sufre de desnutrición crónica.</span> "
     "<span style='font-size:1rem;'>(Fuente: UNICEF Ecuador)</span>",
     unsafe_allow_html=True
 )
