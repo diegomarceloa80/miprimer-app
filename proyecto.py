@@ -12,8 +12,7 @@ import requests
 # Set page configuration
 st.set_page_config(page_title="Diagnóstico de Desnutrición Crónica Infantil", layout="wide")
 
-# API Key de OpenAI desde secretos de Streamlit
-#api_key = os.getenv("OPENAI_API_KEY")
+
 
 
 def classify_dci(age_months, height_cm):
@@ -83,8 +82,11 @@ def get_recommendations_from_openai(age_months, weight_kg, height_cm, dci_status
 
 # --- Interfaz de la aplicación Streamlit ---
 
-st.title("Proyecto Final: Diagnóstico de Desnutrición Crónica Infantil")
+st.title("Diagnóstico de Desnutrición Crónica Infantil (DCI) y Recomendaciones de Alimentación")
 st.markdown("---")
+st.markdown(
+    ":orange-badge[⚠️ 1 de 3] :gray-badge[niños menores de 2 años en Ecuador sufre de desnutrición crónica.]  \n (Fuente: UNICEF Ecuador)"
+)
 
 # Ask user for their OpenAI API key via `st.text_input`.
 # Alternatively, you can store the API key in `./.streamlit/secrets.toml` and access it
@@ -226,5 +228,6 @@ else:
             recommendations = get_recommendations_from_openai(age_months, weight_kg, height_cm, dci_status)
             if recommendations:
                 st.markdown(recommendations)
-        
+st.markdown("---")
+st.caption("© 2025 | Desarrollado por [Diego Marcelo Altamirano Plazarte] | Maestría en Inteligencia Artificial | Fundamentos de Inteligencia Artificial")        
         
