@@ -110,29 +110,100 @@ if submitted:
     dci_status = classify_dci(age_months, height_cm)
     st.write(f"### Estado de Salud Detectado: **{dci_status}**")
     
-    # 2. Gráfico comparativo
+   # Datos de ejemplo de la OMS (talla para la edad para niños, de 0 a 60 meses)
+# Nota: En un proyecto real, estos datos se cargarían desde un archivo CSV o una base de datos.
+# Aquí se presentan de forma simplificada para ilustrar el concepto.
+def get_who_data():
+    data = {
+        'age_months': np.arange(0, 61),
+        'mediana_z0': [
+            49.9, 54.7, 58.4, 61.4, 63.9, 66.0, 67.8, 69.2, 70.6, 71.9, 73.1, 74.5, 75.7, 76.9, 78.0, 79.1, 80.1, 81.1, 82.0, 82.9, 
+            83.8, 84.7, 85.5, 86.4, 87.2, 88.0, 88.8, 89.5, 90.3, 91.0, 91.7, 92.4, 93.0, 93.7, 94.3, 94.9, 95.5, 96.1, 96.7, 97.2, 
+            97.8, 98.4, 98.9, 99.5, 100.0, 100.6, 101.1, 101.7, 102.2, 102.8, 103.3, 103.8, 104.3, 104.8, 105.3, 105.8, 106.3, 106.8, 
+            107.3, 107.8, 108.3
+        ],
+        'desviacion_estandar': [
+            1.8, 2.1, 2.3, 2.4, 2.5, 2.5, 2.6, 2.6, 2.6, 2.6, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 
+            2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 
+            2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 
+            2.7
+        ]
+    }
+    return pd.DataFrame(data)
+
+def classify_dci(age_months, height_cm, who_df):
+    """
+    Clasifica el riesgo de DCI usando el Z-score real de la OMS.
+    """
+    row = who_df[who_df['age_months'] == age_months].iloc[0]
+    mediana = row['mediana_z0']
+    desviacion_estandar = row['desviacion_estandar']
+    
+    z_score = (height_cm - mediana) / desviacion_estandar
+    
+    if z_score < -2:
+        return "Riesgo de Desnutrición Crónica"
+    else:
+        return "Normal"
+
+# Carga de datos de la OMS
+who_df = get_who_data()
+
+# --- Interfaz de la aplicación Streamlit ---
+st.title("Proyecto Final: Diagnóstico de Desnutrición Crónica Infantil")
+st.markdown("---")
+st.header("1. Ingreso de Parámetros")
+
+with st.form("input_form"):
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        age_months = st.number_input("Edad del niño (meses)", min_value=1, max_value=60, step=1, value=24)
+    with col2:
+        weight_kg = st.number_input("Peso (kg)", min_value=1.0, max_value=50.0, step=0.1, value=10.0)
+    with col3:
+        height_cm = st.number_input("Estatura (cm)", min_value=30.0, max_value=150.0, step=0.1, value=85.0)
+    submitted = st.form_submit_button("Analizar")
+
+st.markdown("---")
+
+if submitted:
+    st.header("2. Resultados del Análisis")
+    
+    dci_status = classify_dci(age_months, height_cm, who_df)
+    st.write(f"### Estado de Salud Detectado: **{dci_status}**")
+    
     st.subheader("Gráfico Comparativo: Estatura vs. Estándares de Referencia")
     
-    # Datos para el gráfico (curvas de referencia de la OMS para el Z-score 0, -2 y +2)
-    # Nota: Estos son datos de ejemplo, para un proyecto real se usarían los datos oficiales.
-    months = np.arange(1, 61)
-    height_normal = 49.9 + (months * 2.5)  # Simplified normal growth curve
-    height_dci_threshold = height_normal * 0.9 # Simplified DCI threshold
+    # Calcular los rangos de la OMS usando los datos de referencia
+    who_df['Z-score +2'] = who_df['mediana_z0'] + (who_df['desviacion_estandar'] * 2)
+    who_df['Z-score 0'] = who_df['mediana_z0']
+    who_df['Z-score -2'] = who_df['mediana_z0'] - (who_df['desviacion_estandar'] * 2)
+
+    # Crear el gráfico con Plotly
+    fig = px.line(
+        who_df,
+        x='age_months',
+        y=['Z-score +2', 'Z-score 0', 'Z-score -2'],
+        labels={'age_months': 'Edad (meses)', 'value': 'Estatura (cm)', 'variable': 'Curva de Crecimiento'},
+        title='Estatura del Niño en Comparación con los Estándares de la OMS'
+    )
     
-    data = {
-        'Edad (meses)': months,
-        'Estatura Normal (cm)': height_normal,
-        'Umbral DCI (cm)': height_dci_threshold
-    }
-    df = pd.DataFrame(data)
-    
-    fig = px.line(df, x='Edad (meses)', y=['Estatura Normal (cm)', 'Umbral DCI (cm)'],
-                  labels={'value': 'Estatura (cm)', 'variable': 'Curva de Crecimiento'},
-                  title='Estatura del Niño en Comparación con los Estándares de la OMS')
+    # Personalizar las líneas y el legend
+    fig.data[0].name = 'Máximo (Z-score +2)'
+    fig.data[1].name = 'Normal (Z-score 0)'
+    fig.data[2].name = 'Umbral DCI (Z-score -2)'
+    fig.data[0].line.color = 'blue'
+    fig.data[1].line.color = 'green'
+    fig.data[2].line.color = 'orange'
     
     # Agregar el punto del niño
-    fig.add_scatter(x=[age_months], y=[height_cm], mode='markers', name='Estatura del Niño',
-                    marker=dict(color='red', size=15))
+    fig.add_scatter(
+        x=[age_months], 
+        y=[height_cm], 
+        mode='markers', 
+        name='Estatura del Niño',
+        marker=dict(color='red', size=15)
+    )
     
     st.plotly_chart(fig, use_container_width=True)
 
