@@ -42,13 +42,13 @@ def get_recommendations_from_openai(age_months, weight_kg, height_cm, dci_status
     """
     Envía los datos a la API de OpenAI para generar recomendaciones personalizadas.
     """
-    if not api_key:
+    if not openai_api_key:
         st.error("Error: La clave de la API de OpenAI no está configurada. Por favor, configura la variable de entorno 'OPENAI_API_KEY'.")
         return None
 
     headers = {
         "Content-Type": "application/json",
-        "Authorization": f"Bearer {api_key}"
+        "Authorization": f"Bearer {openai_api_key}"
     }
 
     prompt = (
@@ -94,7 +94,7 @@ if not openai_api_key:
     st.info("Please add your OpenAI API key to continue.", icon="🗝️")
 else:
     # Create an OpenAI client.
-    client = OpenAI(api_key=openai_api_key)
+    #client = OpenAI(api_key=openai_api_key)
  
  
     # Create a session state variable to store the chat messages. This ensures that the
