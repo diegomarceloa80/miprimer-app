@@ -7,14 +7,13 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 import requests
-import json
-import os
+#import os
 
 # Set page configuration
 st.set_page_config(page_title="Diagnóstico de Desnutrición Crónica Infantil", layout="wide")
 
 # API Key de OpenAI desde secretos de Streamlit
-api_key = os.getenv("OPENAI_API_KEY")
+#api_key = os.getenv("OPENAI_API_KEY")
 
 def classify_dci(age_months, height_cm):
     """

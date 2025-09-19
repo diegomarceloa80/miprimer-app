@@ -1,2 +1,6 @@
 streamlit
 python-dotenv
+pandas
+numpy
+plotly
+requests
