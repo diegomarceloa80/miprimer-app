@@ -115,11 +115,11 @@ else:
         
         with col1:
             #age_months = st.number_input("Edad del niño (meses)", min_value=1, max_value=60, step=1, value=24)
-            age_months = st.slider("Edad del niño (meses)", min_value=1, max_value=60, step=1, value=24)
+            age_months = st.slider("Edad del niño (meses)", min_value=1, max_value=60, step=1, value=1)
         with col2:
             weight_kg = st.number_input("Peso (kg)", min_value=1.0, max_value=50.0, step=0.1, value=10.0)
         with col3:
-            height_cm = st.number_input("Estatura (cm)", min_value=30.0, max_value=150.0, step=0.1, value=85.0)
+            height_cm = st.number_input("Estatura (cm)", min_value=30.0, max_value=150.0, step=0.1, value=58.0)
 
         submitted = st.form_submit_button("Analizar")
 
@@ -128,14 +128,14 @@ else:
     if submitted:
         st.header("2. Resultados del Análisis")
         
-    # 1. Clasificación
-    dci_status = classify_dci(age_months, height_cm)
-    # Mostrar el estado de salud coloca un color según el estado
-    if dci_status == "Riesgo de Desnutrición Crónica":
-        st.error(f"### Estado de Salud Detectado: **{dci_status}**")
-    else:
-        st.success(f"### Estado de Salud Detectado: **{dci_status}**")
-    #
+        # 1. Clasificación
+        dci_status = classify_dci(age_months, height_cm)
+        # Mostrar el estado de salud coloca un color según el estado
+        if dci_status == "Riesgo de Desnutrición Crónica":
+            st.error(f"### Estado de Salud Detectado: **{dci_status}**")
+        else:
+            st.success(f"### Estado de Salud Detectado: **{dci_status}**")
+        #
         
     # Datos de ejemplo de la OMS (talla para la edad para niños, de 0 a 60 meses)
     # Nota: En un proyecto real, estos datos se cargarían desde un archivo CSV o una base de datos.
